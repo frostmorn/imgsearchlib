@@ -8,11 +8,6 @@
 //#include "stdafx.h"
 DEFINE_GUID(EncoderColorDepth, 0x66087055, 0xad66, 0x4c7c, 0x9a, 0x18, 0x38, 0xa2, 0x31, 0x0b, 0x83, 0x37);
 
-/*
-	Костыль из GdiPlusImaging.h
-	Ни в каком из порядков инклудов не собирается, поэтому я задефайнил так
-*/
-
 
 float GetPicMatch(Gdiplus::BitmapData *BitmapData1, Gdiplus::BitmapData *BitmapData2, int xpos, int ypos, float MinMatch, int width, int height) {
 
@@ -89,15 +84,16 @@ extern "C" __declspec(dllexport) Gdiplus::Bitmap *HWNDToPBitmap(HWND hwnd, int P
 			int PixForm;
 			switch (PixelFormat) {
 			case 1: {PixForm = PixelFormat1bppIndexed;
-				break; }	// Чёрный/Белый
+				break; }	
 			case 2: {PixForm = PixelFormat4bppIndexed;
-				break; }		// 4 бит серые тона
+				break; }		
 			case 3: {PixForm = PixelFormat8bppIndexed;
-				break; }	// 8 бит серые тона
+				break; }	
 			case 4: {PixForm = PixelFormat24bppRGB;
-				break; }	// 2^24 полноцветная
+				break; }	
 			}
-					Gdiplus::Bitmap *pbmp;
+			
+			Gdiplus::Bitmap *pbmp;
 		
 #ifdef _LogS
 			std::cout << "GetWindowRect" << std::endl;
@@ -174,7 +170,7 @@ extern "C" __declspec(dllexport) Gdiplus::Bitmap *HWNDToPBitmap(HWND hwnd, int P
 
 			delete[] pixel;
 
-	#ifdef _LogS
+#ifdef _LogS
 			std::cout << "Gdiplus::Bitmap.Clone()" << std::endl;
 #endif
 		
@@ -291,16 +287,14 @@ static Gdiplus::Bitmap *ScaleBitmap(Gdiplus::Bitmap *pbmp, int nWidth, int nHeig
 }
 
 extern "C" __declspec(dllexport) Position *SeekImgOnImg(Gdiplus::Bitmap *pbmp1, 
-														Gdiplus::Bitmap *pbmp2, 
-														int Quality, 
-														int OccurCount, 
-														float MinPercentMatch) {
+		Gdiplus::Bitmap *pbmp2, 
+		int Quality, 
+		int OccurCount, 
+		float MinPercentMatch) {
 
 	if (!pbmp1 || !pbmp2)
 		return 0;
 	if ((pbmp1->GetWidth() > pbmp2->GetWidth())||(pbmp1->GetHeight()>pbmp2->GetHeight()))	
-		//высота или ширина искомого изображения больше 
-		//основного
 		return 0;
 
 	float pbmp1NewWidth, pbmp2NewWidth, pbmp1NewHeight, pbmp2NewHeight;
@@ -431,7 +425,7 @@ extern "C" __declspec(dllexport) Position *SearchFromFolderOnHwnd(wchar_t *Folde
 ;						 throw 0;
 					 }
 				 free(nPath);
-				// delete pbmp1;
+				 
 				 free(CurrentPositionList);
 			
 			 } while (FindNextFileW(SearchHandle, &FileData));
